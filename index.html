@@ -39,14 +39,17 @@
     <main>
       <!-- STEP 1 -->
       <section class="step" aria-labelledby="s1">
-        <h2 id="s1"><span class="num">1</span> Choose your files</h2>
-        <div id="drop" class="drop" tabindex="0" role="button" aria-label="Choose files. Click here or drop files on this box">
+        <h2 id="s1"><span class="num">1</span> Choose your pictures</h2>
+        <div id="drop" class="drop" tabindex="0" role="button" aria-label="Choose pictures. Click here or drop pictures on this box">
           <div class="drop-icon" aria-hidden="true">+</div>
-          <strong>Click here to choose files</strong>
+          <strong>Click here to choose pictures</strong>
           <span>or drag and drop them onto this box</span>
-          <input id="fileInput" type="file" multiple hidden>
+          <small>Pictures only: JPG, PNG, GIF, WEBP, BMP, AVIF, HEIC, TIFF, SVG</small>
+          <input id="fileInput" type="file" multiple hidden accept="image/*,.jpg,.jpeg,.png,.gif,.webp,.bmp,.avif,.heic,.heif,.tif,.tiff,.svg,.ico">
         </div>
+        <p id="skipped" class="skipped" role="status" hidden></p>
         <p id="fileCount" class="hint" hidden></p>
+        <ul id="added" class="added" aria-label="Pictures you added"></ul>
       </section>
 
       <!-- STEP 2 -->
@@ -140,6 +143,16 @@
           </div>
         </div>
 
+        <div class="live" aria-live="polite">
+          <div class="live-title">Your name so far <span id="liveNote" class="live-note"></span></div>
+          <div class="live-names">
+            <span id="liveBefore" class="before"></span>
+            <span class="live-arrow" aria-hidden="true">&rarr;</span>
+            <strong id="liveAfter" class="live-after"></strong>
+          </div>
+          <div id="liveChips" class="chips"></div>
+        </div>
+
         <div class="reset-row"><button id="reset" class="link-btn" type="button">Start over with all options</button></div>
       </section>
 
@@ -149,7 +162,7 @@
       <!-- STEP 3 -->
       <section class="step" aria-labelledby="s3" aria-live="polite">
         <h2 id="s3"><span class="num">3</span> Check and download</h2>
-        <p id="empty" class="empty">Your files will show up here once you choose them in step 1.</p>
+        <p id="empty" class="empty">Your pictures will show up here once you choose them in step 1.</p>
         <div id="results" hidden>
           <p id="summary" class="summary"></p>
           <div class="list" id="rows"></div>

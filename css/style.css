@@ -140,3 +140,27 @@ input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-v
 details { border-top: 1px solid var(--line); padding: 10px 0; }
 summary { cursor: pointer; font-weight: 600; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Live name preview */
+.live { margin-top: 14px; padding: 14px; border: 2px solid var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.live-title { font-weight: 700; margin-bottom: 6px; }
+.live-note { font-weight: 400; color: var(--muted); font-size: .88rem; }
+.live-names { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.live-names .before { font-size: .95rem; }
+.live-arrow { color: var(--accent); font-weight: 700; }
+.live-after { font-size: 1.15rem; word-break: break-all; }
+.live-after.is-bad { color: var(--bad); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: .85rem; max-width: 100%; overflow-wrap: anywhere; }
+.chip--none { color: var(--muted); border-style: dashed; }
+
+/* Added pictures list */
+.small-note, .drop small { color: var(--muted); }
+.drop small { margin-top: 6px; }
+.skipped { margin: 10px 0 0; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb, var(--warn) 14%, var(--surface)); color: var(--fg); font-size: .92rem; }
+.added { list-style: none; margin: 10px 0 0; padding: 0; border: 1px solid var(--line); border-radius: 10px; max-height: 260px; overflow-y: auto; }
+.added:empty { display: none; }
+.added li { display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 10px; border-bottom: 1px solid var(--line); }
+.added li:last-child { border-bottom: 0; }
+.added img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; background: var(--bg); flex: 0 0 auto; }
+.added-name { flex: 1; min-width: 0; word-break: break-all; font-size: .95rem; }

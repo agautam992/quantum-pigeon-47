@@ -50,6 +50,8 @@
       t.querySelector('.dot').hidden = !PANELS[t.getAttribute('data-panel')](o);
     });
 
+    renderLive(o);
+
     var list = $('rows');
     list.textContent = '';
     var bad = 0, changed = 0, dup = 0, ill = 0;
@@ -74,7 +76,7 @@
 
       var b = document.createElement('button');
       b.className = 'x'; b.type = 'button'; b.setAttribute('aria-label', 'Remove ' + r.original); b.title = 'Remove this file'; b.textContent = '×';
-      b.addEventListener('click', function () { files.splice(i, 1); render(); });
+      b.addEventListener('click', function () { removeAt(i); });
 
       row.appendChild(body); row.appendChild(b);
       list.appendChild(row);
@@ -82,7 +84,7 @@
 
     var n = files.length;
     $('fileCount').hidden = !n;
-    $('fileCount').textContent = n + ' file' + (n === 1 ? '' : 's') + ' chosen. You can add more.';
+    $('fileCount').textContent = n + ' picture' + (n === 1 ? '' : 's') + ' added. You can add more.';
     $('summary').textContent = changed + ' of ' + n + ' file' + (n === 1 ? '' : 's') + ' will get a new name.';
 
     var hints = [];
@@ -96,10 +98,95 @@
     $('download').textContent = n > 1 ? 'Download ' + n + ' renamed files (ZIP)' : 'Download renamed file';
   }
 
-  function addFiles(list) {
-    Array.prototype.forEach.call(list, function (f) { files.push(f); });
+  var SAMPLE = { name: 'IMG 4821.JPG', size: 0, lastModified: 0 };
+
+  function chipsFor(o) {
+    var c = [];
+    if (o.newName) c.push('Name: ' + o.newName);
+    if (o.numbering) c.push('Numbers from ' + o.numStart);
+    if (o.prefix) c.push('Start: ' + o.prefix);
+    if (o.suffix) c.push('End: ' + o.suffix);
+    if (o.findText) c.push('Replace “' + o.findText + '”');
+    if (o.caseMode !== 'none') c.push('Letters: ' + ({ lower: 'small', upper: 'CAPITALS', title: 'Each Word', sentence: 'First letter' }[o.caseMode]));
+    if (o.spaces !== 'none') c.push('Spaces: ' + ({ underscore: '_', dash: '-', remove: 'removed' }[o.spaces]));
+    if (o.stripSpecial) c.push('Symbols removed');
+    if (o.extMode !== 'keep') c.push('File type: ' + ({ lower: 'small', upper: 'CAPITALS', change: '.' + (o.extNew || '?').replace(/^\./, ''), remove: 'removed' }[o.extMode]));
+    return c;
+  }
+
+  function renderLive(o) {
+    var f = files.length ? files[0] : SAMPLE;
+    var r = (files.length ? results[0] : Renamer.plan([SAMPLE], o)[0]);
+    $('liveBefore').textContent = f.name;
+    $('liveAfter').textContent = r.renamed || '(empty)';
+    $('liveAfter').classList.toggle('is-bad', !!BAD[r.status] && r.status !== 'duplicate');
+    $('liveNote').textContent = files.length
+      ? '(first of ' + files.length + ' file' + (files.length === 1 ? '' : 's') + ')'
+      : '(example, choose files in step 1)';
+    var box = $('liveChips'); box.textContent = '';
+    var chips = chipsFor(o);
+    if (!chips.length) {
+      var none = document.createElement('span'); none.className = 'chip chip--none'; none.textContent = 'Nothing added yet'; box.appendChild(none);
+    }
+    chips.forEach(function (t) { var s = document.createElement('span'); s.className = 'chip'; s.textContent = t; box.appendChild(s); });
+  }
+
+  var IMG_EXT = /\.(jpe?g|png|gif|webp|bmp|avif|heic|heif|tiff?|svg|ico)$/i;
+  var thumbs = new Map();     // File -> object URL for the small preview
+
+  function isImage(f) {
+    return (f.type && f.type.indexOf('image/') === 0) || IMG_EXT.test(f.name);
+  }
+
+  function renderAdded() {
+    var ul = $('added');
+    ul.textContent = '';
+    files.forEach(function (f, i) {
+      var li = document.createElement('li');
+      var img = document.createElement('img');
+      img.alt = ''; img.width = 40; img.height = 40; img.loading = 'lazy';
+      if (!thumbs.has(f)) thumbs.set(f, URL.createObjectURL(f));
+      img.src = thumbs.get(f);
+      img.addEventListener('error', function () { img.style.visibility = 'hidden'; });
+      var name = document.createElement('span'); name.className = 'added-name'; name.textContent = f.name;
+      var b = document.createElement('button');
+      b.className = 'x'; b.type = 'button'; b.setAttribute('aria-label', 'Remove ' + f.name); b.title = 'Remove this picture'; b.textContent = '×';
+      b.addEventListener('click', function () { removeAt(i); });
+      li.appendChild(img); li.appendChild(name); li.appendChild(b);
+      ul.appendChild(li);
+    });
+  }
+
+  function dropThumb(f) {
+    if (thumbs.has(f)) { URL.revokeObjectURL(thumbs.get(f)); thumbs.delete(f); }
+  }
+
+  function removeAt(i) {
+    dropThumb(files[i]);
+    files.splice(i, 1);
+    renderAdded(); render();
+  }
+
+  function clearAll() {
+    files.forEach(dropThumb);
+    files = [];
     $('notice').textContent = '';
-    render();
+    $('skipped').hidden = true;
+    renderAdded(); render();
+  }
+
+  function addFiles(list) {
+    var skipped = 0;
+    Array.prototype.forEach.call(list, function (f) {
+      if (isImage(f)) files.push(f); else skipped++;
+    });
+    var sk = $('skipped');
+    sk.hidden = !skipped;
+    sk.textContent = skipped
+      ? skipped + ' file' + (skipped === 1 ? ' was' : 's were') + ' skipped because only pictures are allowed (not videos, documents or other files).'
+      : '';
+    $('notice').textContent = '';
+    renderAdded(); render();
   }
 
   function download() {
@@ -178,7 +265,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
       t.addEventListener('click', function () { showPanel(t.getAttribute('data-panel')); });
     });
-    $('clear').addEventListener('click', function () { files = []; $('notice').textContent = ''; render(); });
+    $('clear').addEventListener('click', clearAll);
     $('reset').addEventListener('click', resetRules);
     $('download').addEventListener('click', download);
     $('fixDup').addEventListener('click', function () { Renamer.resolveDuplicates(results); applyFixed(); });
