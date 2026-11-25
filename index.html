@@ -3,29 +3,203 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Soul Memoir — Coming Soon</title>
-<meta name="description" content="Soul Memoir is coming soon.">
-<style>
-  :root { --bg:#faf7f2; --fg:#2b2a33; --muted:#6b6878; --accent:#7a5cff; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#14131a; --fg:#f1eef8; --muted:#a29fb3; --accent:#a58bff; }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; min-height: 100vh; display: grid; place-items: center;
-    background: var(--bg); color: var(--fg);
-    font-family: Georgia, "Times New Roman", serif; text-align: center; padding: 0 16px;
-  }
-  h1 { font-size: clamp(2.2rem, 7vw, 4rem); font-weight: 400; margin: 0 0 .5rem; letter-spacing: .02em; }
-  .tag { display: inline-block; color: var(--accent); text-transform: uppercase; letter-spacing: .3em; font: 600 .8rem system-ui, sans-serif; margin-bottom: 1.5rem; }
-  p { color: var(--muted); font-size: 1.15rem; margin: 0; }
-</style>
+<title>Free Bulk File Renamer Online | Soul Memoir</title>
+<meta name="description" content="Rename many files at once in your browser. Add numbers, change words, fix capital letters and more. Free, private, nothing is uploaded.">
+<link rel="canonical" href="https://soulmemoir.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Free Bulk File Renamer Online | Soul Memoir">
+<meta property="og:description" content="Rename many files at once in your browser. Private: files never leave your device.">
+<meta property="og:url" content="https://soulmemoir.com/">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <main>
-    <span class="tag">Coming Soon</span>
-    <h1>Soul Memoir</h1>
-    <p>Something meaningful is on its way. Please check back soon.</p>
-  </main>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./">Soul <b>Memoir</b></a>
+    <nav class="nav" aria-label="Main">
+      <a href="./" aria-current="page">Renamer</a>
+      <a href="how-to.html">Help</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- AD SLOT: top-banner (responsive, 728x90 / 970x90 / 320x50). Paste ad code inside. -->
+  <div class="ad-slot ad-slot--top-banner" data-ad-slot="top-banner" aria-hidden="true"></div>
+
+  <section class="hero">
+    <h1>Rename many files in a few clicks</h1>
+    <p>Pick your files, choose how they should be renamed, and download. It is free, and your files never leave your device.</p>
+  </section>
+
+  <div class="layout">
+    <main>
+      <!-- STEP 1 -->
+      <section class="step" aria-labelledby="s1">
+        <h2 id="s1"><span class="num">1</span> Choose your files</h2>
+        <div id="drop" class="drop" tabindex="0" role="button" aria-label="Choose files. Click here or drop files on this box">
+          <div class="drop-icon" aria-hidden="true">+</div>
+          <strong>Click here to choose files</strong>
+          <span>or drag and drop them onto this box</span>
+          <input id="fileInput" type="file" multiple hidden>
+        </div>
+        <p id="fileCount" class="hint" hidden></p>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" aria-labelledby="s2">
+        <h2 id="s2"><span class="num">2</span> How should they be renamed?</h2>
+        <p class="hint">Pick what you want to change. You can use more than one. A dot <span class="dot-demo" aria-hidden="true"></span> means that option is switched on.</p>
+
+        <div class="tabs" role="tablist" aria-label="Rename options">
+          <button class="tab is-active" role="tab" type="button" data-panel="p-name" aria-selected="true" aria-controls="p-name"><span class="tab-ico" aria-hidden="true">1 2 3</span>New name &amp; numbers<i class="dot" hidden></i></button>
+          <button class="tab" role="tab" type="button" data-panel="p-add" aria-selected="false" aria-controls="p-add"><span class="tab-ico" aria-hidden="true">Ab</span>Add words<i class="dot" hidden></i></button>
+          <button class="tab" role="tab" type="button" data-panel="p-replace" aria-selected="false" aria-controls="p-replace"><span class="tab-ico" aria-hidden="true">&#8644;</span>Replace a word<i class="dot" hidden></i></button>
+          <button class="tab" role="tab" type="button" data-panel="p-case" aria-selected="false" aria-controls="p-case"><span class="tab-ico" aria-hidden="true">Aa</span>Capital letters<i class="dot" hidden></i></button>
+          <button class="tab" role="tab" type="button" data-panel="p-tidy" aria-selected="false" aria-controls="p-tidy"><span class="tab-ico" aria-hidden="true">&#10024;</span>Tidy up<i class="dot" hidden></i></button>
+          <button class="tab" role="tab" type="button" data-panel="p-type" aria-selected="false" aria-controls="p-type"><span class="tab-ico" aria-hidden="true">.ext</span>File type<i class="dot" hidden></i></button>
+        </div>
+
+        <div class="panel" id="p-name" role="tabpanel">
+          <div class="field">
+            <label for="newName">Give every file this name <em>(optional)</em></label>
+            <input id="newName" type="text" placeholder="Example: Holiday" autocomplete="off">
+            <small>Leave empty to keep each file's own name.</small>
+          </div>
+          <label class="check big"><input id="numbering" type="checkbox"> Add numbers: 1, 2, 3&hellip; <small>(needed if all files get the same name)</small></label>
+          <div id="numOpts" class="sub" hidden>
+            <div class="grid2">
+              <div class="field"><label for="numStart">Start counting at</label><input id="numStart" type="number" value="1"></div>
+              <div class="field"><label for="numPad">Number style</label>
+                <select id="numPad"><option value="0">1, 2, 3</option><option value="2">01, 02, 03</option><option value="3" selected>001, 002, 003</option><option value="4">0001, 0002, 0003</option></select></div>
+              <div class="field"><label for="numPosition">Put the number</label>
+                <select id="numPosition"><option value="suffix">After the name</option><option value="prefix">Before the name</option></select></div>
+              <div class="field"><label for="numSeparator">Between name and number</label>
+                <select id="numSeparator"><option value="_">Underscore ( _ )</option><option value="-">Dash ( - )</option><option value=" ">Space</option><option value="">Nothing</option></select></div>
+              <div class="field"><label for="sortBy">Number the files in order of</label>
+                <select id="sortBy"><option value="added">The order I added them</option><option value="name">Name (A to Z)</option><option value="date">Date (oldest first)</option><option value="size">Size (smallest first)</option></select></div>
+              <input id="numStep" type="hidden" value="1">
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="p-add" role="tabpanel" hidden>
+          <div class="grid2">
+            <div class="field"><label for="prefix">Add at the start</label><input id="prefix" type="text" placeholder="Example: 2026_" autocomplete="off"></div>
+            <div class="field"><label for="suffix">Add at the end <em>(before .jpg, .pdf, etc.)</em></label><input id="suffix" type="text" placeholder="Example: _final" autocomplete="off"></div>
+          </div>
+        </div>
+
+        <div class="panel" id="p-replace" role="tabpanel" hidden>
+          <div class="grid2">
+            <div class="field"><label for="findText">Find this word</label><input id="findText" type="text" placeholder="Example: IMG" autocomplete="off"></div>
+            <div class="field"><label for="replaceText">Change it to <em>(empty = remove it)</em></label><input id="replaceText" type="text" placeholder="Example: Photo" autocomplete="off"></div>
+          </div>
+          <label class="check"><input id="matchCase" type="checkbox"> Care about capital letters when finding</label>
+          <details class="adv"><summary>Advanced</summary>
+            <label class="check"><input id="useRegex" type="checkbox"> Treat what I typed as a pattern (regular expression)</label>
+          </details>
+        </div>
+
+        <div class="panel" id="p-case" role="tabpanel" hidden>
+          <div class="field"><label for="caseMode">Change the letters to</label>
+            <select id="caseMode">
+              <option value="none">Leave as they are</option>
+              <option value="lower">all small: my holiday photo</option>
+              <option value="upper">ALL CAPITALS: MY HOLIDAY PHOTO</option>
+              <option value="title">Each Word Capital: My Holiday Photo</option>
+              <option value="sentence">First letter only: My holiday photo</option>
+            </select></div>
+        </div>
+
+        <div class="panel" id="p-tidy" role="tabpanel" hidden>
+          <div class="field"><label for="spaces">Spaces in names</label>
+            <select id="spaces">
+              <option value="none">Leave them</option>
+              <option value="underscore">Change to underscore ( _ )</option>
+              <option value="dash">Change to dash ( - )</option>
+              <option value="remove">Remove them</option>
+            </select></div>
+          <label class="check"><input id="stripSpecial" type="checkbox"> Remove odd symbols like ! # $ % &amp; ( )</label>
+        </div>
+
+        <div class="panel" id="p-type" role="tabpanel" hidden>
+          <div class="field"><label for="extMode">The part after the dot (.jpg, .pdf)</label>
+            <select id="extMode">
+              <option value="keep">Leave it</option>
+              <option value="lower">Make it small letters (.jpg)</option>
+              <option value="upper">Make it capitals (.JPG)</option>
+              <option value="change">Change it to something else</option>
+              <option value="remove">Remove it</option>
+            </select></div>
+          <div id="extOpts" class="sub" hidden>
+            <div class="field"><label for="extNew">New ending</label><input id="extNew" type="text" placeholder="Example: jpg" autocomplete="off"><small>Only renames. It does not convert the file.</small></div>
+          </div>
+        </div>
+
+        <div class="reset-row"><button id="reset" class="link-btn" type="button">Start over with all options</button></div>
+      </section>
+
+      <!-- AD SLOT: in-content (300x250 / 336x280 / responsive). Between options and results. -->
+      <div class="ad-slot ad-slot--in-content" data-ad-slot="in-content" aria-hidden="true"></div>
+
+      <!-- STEP 3 -->
+      <section class="step" aria-labelledby="s3" aria-live="polite">
+        <h2 id="s3"><span class="num">3</span> Check and download</h2>
+        <p id="empty" class="empty">Your files will show up here once you choose them in step 1.</p>
+        <div id="results" hidden>
+          <p id="summary" class="summary"></p>
+          <div class="list" id="rows"></div>
+          <div id="fixRow" class="fix" hidden>
+            <p id="fixMsg"></p>
+            <div class="row">
+              <button id="fixDup" class="btn btn--small" type="button" hidden>Fix same names automatically</button>
+              <button id="fixIllegal" class="btn btn--small" type="button" hidden>Fix not-allowed symbols automatically</button>
+            </div>
+          </div>
+          <p id="notice" class="notice"></p>
+          <div class="dl">
+            <button id="download" class="btn btn--primary btn--big" type="button" disabled>Download renamed files</button>
+            <button id="clear" class="link-btn" type="button">Remove all files</button>
+          </div>
+          <p class="hint">Your original files are not changed. You get renamed copies (several files come in one ZIP).</p>
+        </div>
+      </section>
+
+      <!-- AD SLOT: below-results (300x250 / 336x280 / responsive). Kept away from the Download button. -->
+      <div class="ad-slot ad-slot--below-results" data-ad-slot="below-results" aria-hidden="true"></div>
+
+      <section class="prose" style="padding-top:8px">
+        <h2>Why rename files in bulk?</h2>
+        <p>Phones and cameras create names like <em>IMG_4821.JPG</em>. With this tool you can turn them into clear names such as <em>Holiday_001.jpg</em> in a few clicks. Add numbers, change a word in every name, or fix capital letters all at once.</p>
+        <p>Everything happens in your browser, so private photos and documents stay private. <a href="how-to.html">See the help page</a> for examples.</p>
+      </section>
+    </main>
+
+    <aside aria-label="Advertisement">
+      <!-- AD SLOT: sidebar (300x600 / 300x250). Desktop only, sticky. -->
+      <div class="ad-slot ad-slot--sidebar" data-ad-slot="sidebar" aria-hidden="true"></div>
+    </aside>
+  </div>
+
+  <!-- AD SLOT: footer-banner (responsive, 728x90 / 320x50). -->
+  <div class="ad-slot ad-slot--footer-banner" data-ad-slot="footer-banner" aria-hidden="true"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav class="nav" aria-label="Footer">
+      <a href="how-to.html">Help</a><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a>
+    </nav>
+    <div>&copy; 2026 Soul Memoir. Your files stay on your device.</div>
+  </div>
+</footer>
+
+<script src="js/vendor/jszip.min.js"></script>
+<script src="js/renamer.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
